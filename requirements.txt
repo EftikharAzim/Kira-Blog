@@ -1,0 +1,8 @@
+Flask
+Flask-SQLAlchemy
+Flask-JWT-Extended
+marshmallow
+requests
+Werkzeug
+dotenv
+pytest
