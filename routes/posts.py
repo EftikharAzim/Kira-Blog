@@ -90,3 +90,31 @@ def delete_post(post_id):
     db.session.commit()
 
     return jsonify({"msg": "Post deleted"})
+
+@posts_bp.route('/my-posts', methods=['GET'])
+@jwt_required()
+def get_my_posts():
+    user_id = get_jwt_identity()
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+
+    pagination = Post.query.filter_by(user_id=user_id).order_by(Post.created_at.desc()).paginate(page=page, per_page=per_page, error_out=False)
+    posts = pagination.items
+
+    result = []
+    for post in posts:
+        result.append({
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "author": post.author.username,
+            "created_at": post.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        })
+
+    return jsonify({
+        "posts": result,
+        "page": page,
+        "per_page": per_page,
+        "total_posts": pagination.total,
+        "total_pages": pagination.pages
+    })

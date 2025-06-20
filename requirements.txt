@@ -4,5 +4,7 @@ Flask-JWT-Extended
 marshmallow
 requests
 Werkzeug
-dotenv
+python-dotenv
 pytest
+flask-cors
+flask-restx
